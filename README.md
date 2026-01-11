@@ -97,7 +97,7 @@ The graph generator can be used to generated these graphs:
 | C        | Random directed (Erdős–Rényi, `erdos_renyi`) | Effect of density (frontier growth)         | 1e5                                   | Medium: `m = 16n`                            | `uniform`           | 3                   |
 | D        | DAG (`dag`)                                  | Propagation-friendly / limited-depth paths  | 1e5                                   | Sparse: `m = 4n`                             | `uniform`           | 3                   |
 | E        | Grid (`grid`)                                | Structured worst-case frontier growth       | ≈316×316 (~1e5) | Natural grid edges (plus none)               | `uniform`           | 3                   |
-| F        | Preferential attachment (`barabasi_albert`)  | Skewed-degree “realistic” networks (hubs)   | 1e5                                   | Medium via attachment (≈`m ≈ n * ba_attach`) | `log_uniform`       | 3                   |
+| F        | Preferential attachment (`barabasi_albert`)  | Skewed-degree “realistic” networks (hubs) (fat tails)   | 1e5                                   | Medium via attachment (≈`m ≈ n * ba_attach`) | `log_uniform`       | 3                   |
 
 ## Expected Outcomes (Realistic)
 
