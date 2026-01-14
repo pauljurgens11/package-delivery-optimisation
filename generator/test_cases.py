@@ -164,11 +164,11 @@ TEST_F_PREFERENTIAL_ATTACHMENT = [
 # -------------------------------------------------------------------
 
 ALL_TEST_SETS = {
-    # "A_baseline_scaling": TEST_A_BASELINE_SCALING,
-    # "B_sorting_stress": TEST_B_SORTING_STRESS,
-    # "C_density_impact": TEST_C_DENSITY_IMPACT,
-    # "D_dag": TEST_D_DAG,
-    # "E_grid": TEST_E_GRID,
+    "A_baseline_scaling": TEST_A_BASELINE_SCALING,
+    "B_sorting_stress": TEST_B_SORTING_STRESS,
+    "C_density_impact": TEST_C_DENSITY_IMPACT,
+    "D_dag": TEST_D_DAG,
+    "E_grid": TEST_E_GRID,
     "F_preferential_attachment": TEST_F_PREFERENTIAL_ATTACHMENT,
 }
 
