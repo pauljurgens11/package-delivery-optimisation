@@ -54,7 +54,12 @@ from typing import List, Tuple, Optional, Literal
 import random
 import math
 
-from test_cases import ALL_TEST_SETS
+try:
+    # When imported as part of the ``generator`` package
+    from .test_cases import ALL_TEST_SETS  # type: ignore[import]
+except ImportError:  # pragma: no cover - fallback for script-style execution
+    # When run as a standalone script from inside the ``generator/`` directory
+    from test_cases import ALL_TEST_SETS  # type: ignore[import]
 
 GraphAdj = List[List[Tuple[int, int]]]
 EdgeList = List[Tuple[int, int, int]]

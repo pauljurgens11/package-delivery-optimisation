@@ -85,6 +85,60 @@ def _write_csv(path: Path, G: Graph) -> None:
             fh.write(f"{u},{v},{w}\n")
 
 
+def _read_txt_edgelist(path: Path) -> Tuple[int, EdgeList]:
+    """Read a simple text edge-list file with an ``n m source`` header.
+
+    This matches the format produced by ``generator/graph_generator.py``
+    via :func:`save_edge_list_txt`:
+
+        n m source
+        u v w
+        u v w
+        ...
+
+    The ``source`` value from the header is currently ignored; callers are
+    expected to provide a source vertex explicitly via CLI options.
+    """
+    edges: EdgeList = []
+    max_id = -1
+    with path.open("r", encoding="utf-8") as fh:
+        header = fh.readline()
+        if not header:
+            raise GraphFormatError("empty txt edge-list file")
+        parts = header.strip().split()
+        if len(parts) < 3:
+            raise GraphFormatError("invalid txt header, expected: n m source")
+        try:
+            n_hdr = int(parts[0])
+            _m_hdr = int(parts[1])
+            _src_hdr = int(parts[2])
+        except Exception as exc:  # pragma: no cover - defensive parsing
+            raise GraphFormatError("invalid numeric values in txt header") from exc
+
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            vals = line.split()
+            if len(vals) < 3:
+                continue
+            try:
+                u = int(vals[0])
+                v = int(vals[1])
+                w = float(vals[2])
+            except Exception:
+                continue
+            edges.append((u, v, w))
+            max_id = max(max_id, u, v)
+
+    # Prefer explicit n from header when it is consistent, otherwise fall back
+    # to max-id based sizing (defensive against malformed files).
+    if max_id < 0:
+        raise GraphFormatError("no edges parsed from txt edge-list file")
+    n = max(max_id + 1, n_hdr)
+    return n, edges
+
+
 def _read_jsonl(path: Path) -> Tuple[int, EdgeList]:
     """Read a JSON Lines (JSONL) file containing graph edges.
 
@@ -270,6 +324,7 @@ _FMT_READERS = {
     "jsonl": _read_jsonl,
     "mtx": _read_mtx,
     "graphml": _read_graphml,
+    "txt": _read_txt_edgelist,
 }
 
 _FMT_WRITERS = {
@@ -299,6 +354,8 @@ def _detect_format(path: Path) -> Optional[str]:
         return "mtx"
     if ext == ".graphml":
         return "graphml"
+    if ext == ".txt":
+        return "txt"
     return None
 
 
